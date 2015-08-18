@@ -34,6 +34,10 @@ Hemos dejado un sketch base que el alumno puede intervenir en DMD (DMD.ino) que,
 Utilizar como apoyo los ejemplos que se instalaron junto a la librería DMD.
 
 
+![](images/Sprite1.jpg)
+
+
+![](images/Sprite2.jpg)
 
 
 
