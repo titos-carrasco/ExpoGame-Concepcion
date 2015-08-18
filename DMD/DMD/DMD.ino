@@ -1,44 +1,76 @@
-#include <SPI.h>        //SPI.h must be included as DMD is written by SPI (the IDE complains otherwise)
-#include <DMD.h>        //
-#include <TimerOne.h>   //
+// DMD está escrito para utilizar SPI
+#include <SPI.h>        
+#include <DMD.h>        
+#include <TimerOne.h>   
 #include "SystemFont5x7.h"
 #include "Arial_black_16.h"
 
-//Fire up the DMD library as dmd
+// Elpanel es manipulado a través de dmd
 #define DISPLAYS_ACROSS 1
 #define DISPLAYS_DOWN 1
 DMD dmd(DISPLAYS_ACROSS, DISPLAYS_DOWN);
 
-/*--------------------------------------------------------------------------------------
-  Interrupt handler for Timer1 (TimerOne) driven DMD refresh scanning, this gets
-  called at the period set in Timer1.initialize();
---------------------------------------------------------------------------------------*/
+// Handler de interrupciones para Timer1 (TimerOne) que maneja el refresco del panel
 void ScanDMD()
 { 
   dmd.scanDisplayBySPI();
 }
 
-/*--------------------------------------------------------------------------------------
-  setup
-  Called by the Arduino architecture before the main loop begins
---------------------------------------------------------------------------------------*/
+// Llamado antes de ingresar al loop() de main()
 void setup(void)
 {
 
-   //initialize TimerOne's interrupt/CPU usage used to scan and refresh the display
-   Timer1.initialize( 5000 );           //period in microseconds to call ScanDMD. Anything longer than 5000 (5ms) and you can see flicker.
-   Timer1.attachInterrupt( ScanDMD );   //attach the Timer1 interrupt to ScanDMD which goes to dmd.scanDisplayBySPI()
+   // Timer1 es utilizado para el scan y refresco del panel
+   Timer1.initialize( 5000 );           // microsegundos entre llamadas a ScanDMD. Valores sobre 5000us puede producir flicker
+   Timer1.attachInterrupt( ScanDMD );   // Asocia la interrupción con ScanDMD
 
-   //clear/init the DMD pixels held in RAM
-   dmd.clearScreen( true );   //true is normal (all pixels off), false is negative (all pixels on)
-
+   // Inicializa y limpia el panel
+   dmd.clearScreen( true );   // true es normal (pixeles apagados), false indica todos los pixeles encendidos
 }
 
-/*--------------------------------------------------------------------------------------
-  loop
-  Arduino architecture main loop
---------------------------------------------------------------------------------------*/
-uint16_t ghost[16]=
+// Los sprites como un arreglo de 16x16 pixeles mono
+uint16_t pacmanOpen[16]=
+{
+  0b0000000000000000,
+  0b0000001111000000,
+  0b0001111111111000,
+  0b0011111111001100,
+  0b0011111111001100,
+  0b0011111111111000,
+  0b0111111111110000,
+  0b0111111111000000,
+  0b0111111110000000,
+  0b0111111111111100,
+  0b0011111111111100,
+  0b0011111111111100,
+  0b0011111111111100,
+  0b0001111111111000,
+  0b0000001111000000,
+  0b0000000000000000,
+
+};
+
+uint16_t pacmanClose[16]=
+{
+  0b0000000000000000,
+  0b0000001111000000,
+  0b0001111111111000,
+  0b0011111111001100,
+  0b0011111111001100,
+  0b0011111111111100,
+  0b0111111111111110,
+  0b0111111111111110,
+  0b0111111111111110,
+  0b0111111111111110,
+  0b0011111111111100,
+  0b0011111111111100,
+  0b0011111111111100,
+  0b0001111111111000,
+  0b0000001111000000,
+  0b0000000000000000,
+};
+
+uint16_t ghost1[16]=
 {
   0b0000000000000000,
   0b0000001111000000,
@@ -58,26 +90,7 @@ uint16_t ghost[16]=
   0b0000000000000000
 };
 
-uint16_t pacman[16]=
-{
-  0b0000000000000000,
-  0b0000001111000000,
-  0b0001111111111000,
-  0b0011111111001100,
-  0b0011111111001100,
-  0b0011111111111000,
-  0b0111111111110000,
-  0b0111111111000000,
-  0b0111111111000000,
-  0b0111111111111100,
-  0b0011111111111100,
-  0b0011111111111100,
-  0b0011111111111100,
-  0b0001111111111000,
-  0b0000001111000000,
-  0b0000000000000000,
-};
-
+// Traza un sprite en el panel
 void drawShape( int x, int y, uint16_t shape[])
 {
   //dmd.clearScreen( true ); 
@@ -92,17 +105,23 @@ void drawShape( int x, int y, uint16_t shape[])
   }
 }
 
+// el loop de arduino
 void loop(void)
 {
-  for(int x=-16; x<32; x++)
+  // Despliega el pacman
+  for(int x=-16; x<32; x+=2)
   {
-    drawShape( x, 0, pacman);
-    delay(50);
+    drawShape( x, 0, pacmanOpen);
+    delay(150);
+    drawShape( x+1, 0, pacmanClose);
+    delay(100);
   }
+
+  // Despliega el primer fantasma
   for(int x=-16; x<32; x++)
   {
-    drawShape( x, 0, ghost);
-    delay(50);
+    drawShape( x, 0, ghost1);
+    delay(100);
   }
 }
 
