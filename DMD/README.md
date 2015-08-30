@@ -21,12 +21,12 @@ Presentar en un panel (P10) de 32x16 (512 leds) diferentes tipos de animaciones,
 
 
 ## Preparación del Entorno de Desarrollo
-1. Loas arduino nano que estamos utilizando tienen el chip CH340 para la conversión USB a Serial. Acorde a la página de [Instructable](http://www.instructables.com/id/Arduino-Nano-CH340/ "") se puede descargar el driver desde [aquí](http://www.wch.cn/download/CH341SER_ZIP.html). Seleccionar la plataforma apropiada a cada situación (en el caso de Linux no es necesario instalar)
+1. Los arduino nano que estamos utilizando tienen el chip CH340 para la conversión USB a Serial. Acorde a la página de [Instructable](http://www.instructables.com/id/Arduino-Nano-CH340/ "") se puede descargar el driver desde [aquí](http://www.wch.cn/download/CH341SER_ZIP.html). Seleccionar la plataforma apropiada a cada situación (en el caso de Linux no es necesario instalar)
 2. En la IDE de Arduino y con el administrador de librería instalar la librería "TimerOne" (Sketch->Include Library->Manage Libraries... buscar TimerOne e instalar)
 3. Descargar el ZIP de la librería DMD desde [aquí](https://github.com/freetronics/DMD) (Download ZIP)
 4. Desde la IDE de Arduino y con el administrador de librería, instalar el ZIP recien descargado (Sketch->Include Library->Add .ZIP Library y seleccionar el archivo descargado en el punto anterior)
-5. Configurar la IDE de Arduino con "Arduino NANO", "ATMega 328" (a menos que utilicen otra) y la puerta respectiva (en el caso de Windows recordar instalr el driver del CH340)
-6.Probar el demo Files->Examples>DMD-master->dmd_demo
+5. Configurar la IDE de Arduino con "Arduino NANO", "ATMega 328" (a menos que utilicen otra) y la puerta respectiva (en el caso de Windows recordar instalar el driver del CH340)
+6. Probar el demo Files->Examples>DMD-master->dmd_demo
 
 ## Implementar la aplicación para la ExpoGame
 Hemos dejado un sketch base que el alumno puede intervenir en DMD (DMD.ino) que, básicamente, despliega de izquierda a derecha un par de imágenes de 16x16 puntos monocromáticos.
